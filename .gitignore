@@ -1,0 +1,12 @@
+.DS_Store
+*/**/node_modules
+
+images/
+pre_slides/
+pre_draw/
+books/
+.idea/
+.env
+
+marp-diagrams/
+projects/
