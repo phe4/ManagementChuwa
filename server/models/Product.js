@@ -10,8 +10,8 @@ const productSchema = new mongoose.Schema({
     required: true
   },
   category: {
-    type: Number,
-    required: true
+    type: String,
+    required: true,
   },
   price: {
     type: Number,
@@ -24,6 +24,10 @@ const productSchema = new mongoose.Schema({
   image: {
     type: String,
     required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
   }
 });
 
