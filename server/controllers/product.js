@@ -1,5 +1,6 @@
 const Product =require('../models/Product');
 const mongoose = require("mongoose");
+const Vendor = require('../models/Vendor');
 
 const getAllProducts = async (req, res) => {
   try {
@@ -35,9 +36,33 @@ const getAllProducts = async (req, res) => {
 
 const createProduct = async (req, res) => {
   const params = req.body;
-  const product = new Product(params);
+  const {
+    productName,
+    productDescription,
+    category,
+    price,
+    quantity,
+    imageUrl,
+  } = params;
+  const userId = req.user._id;
   try {
+    const vendor = await Vendor.findById(userId);
+    if (!vendor) {
+      return res.status(400).json({ message: 'Vendor not found' });
+    }
+    const product = new Product({
+      productName,
+      productDescription,
+      category,
+      price,
+      quantity,
+      imageUrl,
+      vendor: userId
+    });
     await product.save();
+    vendor.products.push(product._id);
+    await vendor.save();
+
     res.status(200).json({ id: product._id, message: 'Create product successfully' });
   } catch (e) {
     console.error(e);
@@ -48,9 +73,18 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const {id} = req.params;
+    const userId = req.user._id;
     const params = req.body;
-    const ID = new mongoose.Types.ObjectId(id);
-    await Product.findByIdAndUpdate(ID, params);
+    const vendor = await Vendor.findById(userId);
+    if (!vendor) {
+      return res.status(400).json({ message: 'Vendor not found' });
+    }
+    // Check if the product belongs to the vendor
+    if (!vendor.products.includes(id)) {
+      return res.status(400).json({ message: 'Product not found' });
+    }
+    // const ID = new mongoose.Types.ObjectId(id);
+    await Product.findByIdAndUpdate(id, params);
     res.status(200).json({ message: 'Update product successfully' });
   } catch (e) {
     console.error(e);
