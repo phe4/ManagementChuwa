@@ -14,9 +14,12 @@ const authMiddleware = async (req, res, next) => {
       // Verify token
       const decoded = await jwt.verify(token, process.env.SECRET_KEY);
 
-      console.log("decoded", decoded);
+      const user = {
+        _id: decoded.user,
+        role: decoded.role,
+      };
       // Add user from payload
-      req.user = decoded.user;
+      req.user = user;
     }
 
     next();

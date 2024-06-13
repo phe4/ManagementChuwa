@@ -1,4 +1,3 @@
-const { required, custom } = require('joi');
 const mongoose = require('mongoose');
 
 const vendorSchema = new mongoose.Schema({

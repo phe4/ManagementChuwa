@@ -53,7 +53,7 @@ const register = async (req, res) => {
       instance: instance._id,
     });
     await user.save();
-    const token = jwt.sign({ user: instance._id }, SECRET_KEY, {
+    const token = jwt.sign({ user: instance._id, role: user.role }, SECRET_KEY, {
       expiresIn: "24h",
     });
     const returnUser = { ...instance._doc };
@@ -76,7 +76,7 @@ const login = async (req, res) => {
     }
 
     const returnUser = { ...user.instance._doc };
-    const token = jwt.sign({ user: user.instance._id }, SECRET_KEY, {
+    const token = jwt.sign({ user: user.instance._id, role: user.role }, SECRET_KEY, {
       expiresIn: "24h",
     });
     return res.status(200).json({ token, user: returnUser });
