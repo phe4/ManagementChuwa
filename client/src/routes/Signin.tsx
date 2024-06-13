@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-function Signin() {
+const Signin = () => {
   const navigate = useNavigate();
 
   const login = () => {

@@ -1,9 +1,23 @@
-import userStar from '../assets/user-star.png'
-import cart from '../assets/cart.png'
+import userStarIcon from '../assets/user-star.png'
+import cartIcon from '../assets/cart.png'
+import Cart, { CMethods } from './Cart';
+import { useRef, FC } from 'react';
 
-function Header() {
+const Header = () => {
 
-  const SearchTemplet = function ({ className }) {
+  const cartRef = useRef<CMethods>(null);
+
+  interface SProps {
+    className: string
+  }
+
+  const toggleCart = (): void => {
+    if (cartRef.current) {
+      cartRef.current.toggle();
+    }
+  };
+
+  const SearchTemplet: FC<SProps> = ({ className }) => {
     return (
       <div className={`${className} relative rounded-md lg:w-96 lg:mx-12 mx-6`}>
         <input type="text" name="search" id="search"
@@ -20,25 +34,28 @@ function Header() {
   }
 
   return (
-    <header className="bg-black-common pb-2.5 lg:pb-0">
-      <nav className="flex justify-between items-center w-full lg:px-12 px-6 py-2">
-        <div className="flex items-center">
-          <h1 className="text-3xl text-white font-bold">
-            <span className="hidden lg:inline">Management </span>
-            <span className="lg:hidden">M</span>
-            <span className="text-xs">Chuwa</span>
-          </h1>
-          <SearchTemplet className="hidden lg:block"/>
-        </div>
-        <div className="flex items-center">
-          <img src={userStar} alt='' className="w-7 h-7"/>
-          <span className="text-white cursor-pointer ml-2 text-base font-semibold">Sign In</span>
-          <img src={cart} alt='' className="w-8 h-8 ml-6"/>
-          <span className="text-white ml-2 text-base font-semibold">$0.00</span>
-        </div>
-      </nav>
-      <SearchTemplet className="lg:hidden"/>
-    </header>
+    <>
+      <header className="bg-black-common pb-2.5 lg:pb-0">
+        <nav className="flex justify-between items-center w-full lg:px-12 px-6 py-2">
+          <div className="flex items-center">
+            <h1 className="text-3xl text-white font-bold">
+              <span className="hidden lg:inline">Management </span>
+              <span className="lg:hidden">M</span>
+              <span className="text-xs">Chuwa</span>
+            </h1>
+            <SearchTemplet className="hidden lg:block"/>
+          </div>
+          <div className="flex items-center">
+            <img src={userStarIcon} alt='' className="w-7 h-7"/>
+            <span className="text-white cursor-pointer ml-2 text-base font-semibold">Sign In</span>
+            <img src={cartIcon} alt='' onClick={toggleCart} className="w-8 h-8 ml-6 cursor-pointer"/>
+            <span className="text-white ml-2 text-base font-semibold">$0.00</span>
+          </div>
+        </nav>
+        <SearchTemplet className="lg:hidden"/>
+      </header>
+      <Cart ref={cartRef}/>
+    </>
   )
 }
 
