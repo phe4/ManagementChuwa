@@ -2,7 +2,7 @@ import youtube from '../assets/youtube.svg';
 import twitter from '../assets/twitter.svg';
 import facebook from '../assets/facebook-fill.svg';
 
-function Footer() {
+const Footer = () => {
   return (
     <footer className="bg-black-common flex flex-col items-center py-5 lg:flex-row lg:justify-between lg:px-12 lg:py-7">
       <div className="flex">
