@@ -1,6 +1,7 @@
-const Product =require('../models/Product');
-const mongoose = require("mongoose");
+const Product = require('../models/Product');
 const Vendor = require('../models/Vendor');
+const mongoose = require("mongoose");
+const Joi = require("joi");
 
 const getAllProducts = async (req, res) => {
   try {
@@ -36,33 +37,29 @@ const getAllProducts = async (req, res) => {
 
 const createProduct = async (req, res) => {
   const params = req.body;
-  const {
-    productName,
-    productDescription,
-    category,
-    price,
-    quantity,
-    imageUrl,
-  } = params;
-  const userId = req.user._id;
-  try {
-    const vendor = await Vendor.findById(userId);
-    if (!vendor) {
-      return res.status(400).json({ message: 'Vendor not found' });
-    }
-    const product = new Product({
-      productName,
-      productDescription,
-      category,
-      price,
-      quantity,
-      imageUrl,
-      vendor: userId
-    });
-    await product.save();
-    vendor.products.push(product._id);
-    await vendor.save();
 
+  if (!req.user || req.user === 'anonymous') return res.status(401).json({ message: 'No token, authorization denied' });
+
+  const schema = Joi.object({
+    name: Joi.string(),
+    description: Joi.string(),
+    category: Joi.string(),
+    price: Joi.number(),
+    quantity: Joi.number(),
+    image: Joi.string(),
+    owner: Joi.string()
+  })
+
+  try {
+    const ID = new mongoose.Types.ObjectId(req.user._id);
+    const vendor = await Vendor.findById(ID);
+    if (!vendor) return res.status(400).json({ message: 'No a valid vendor' });
+
+    params.owner = req.user._id;
+    await schema.validateAsync(params);
+
+    const product = new Product(params);
+    await product.save();
     res.status(200).json({ id: product._id, message: 'Create product successfully' });
   } catch (e) {
     console.error(e);
@@ -71,20 +68,19 @@ const createProduct = async (req, res) => {
 };
 
 const updateProduct = async (req, res) => {
+  if (!req.user || req.user === 'anonymous') return res.status(401).json({ message: 'No token, authorization denied' });
+
   try {
     const {id} = req.params;
-    const userId = req.user._id;
     const params = req.body;
-    const vendor = await Vendor.findById(userId);
-    if (!vendor) {
-      return res.status(400).json({ message: 'Vendor not found' });
-    }
-    // Check if the product belongs to the vendor
-    if (!vendor.products.includes(id)) {
-      return res.status(400).json({ message: 'Product not found' });
-    }
-    // const ID = new mongoose.Types.ObjectId(id);
-    await Product.findByIdAndUpdate(id, params);
+
+    const ID = new mongoose.Types.ObjectId(id);
+    const product = await Product.findById(ID);
+
+    if (product.owner.toString() !== req.user._id) return res.status(401).json({ message: 'Authorization denied' });
+
+    if (params.hasOwnProperty('owner')) delete params['owner'];
+    await Product.findByIdAndUpdate(ID, params);
     res.status(200).json({ message: 'Update product successfully' });
   } catch (e) {
     console.error(e);

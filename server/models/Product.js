@@ -25,9 +25,16 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Vendor',
+    required: true,
+    immutable: true
+  },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
+    immutable: true
   }
 });
 

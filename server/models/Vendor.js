@@ -16,10 +16,6 @@ const vendorSchema = new mongoose.Schema({
   phone: {
     type: String,
   },
-  products: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product',
-  }],
   orders: [{
     customer: {
       type: mongoose.Schema.Types.ObjectId,
