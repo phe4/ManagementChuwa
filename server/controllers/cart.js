@@ -1,6 +1,7 @@
 const Cart = require('../models/Cart');
 const Product = require('../models/Product');
-const TestUser = require('../models/TestUser');
+const User = require('../models/User');
+const Customer = require('../models/Customer');
 
 const calculateTotalPrice = (items) => {
   return items.reduce(async (total, item) => {
@@ -11,14 +12,17 @@ const calculateTotalPrice = (items) => {
 
 const createCart = async (userId) => {
   const cart = new Cart({
-    userId: userId,
     items: [],
     totalPrice: 0.00,
   });
 
   try {
-    const result = await cart.save();
-    console.log('Cart created:', result);
+    const user = await User.findById(userId);
+    const customer = await Customer.findById(user.instance);
+    customer.cart = cart;
+    await cart.save();
+    await customer.save();
+    res.status(200).json(cart);
   } catch (err) {
     console.log('Error creating cart:', err);
   }
@@ -29,7 +33,9 @@ const getAllProductsFromCart = async (req, res) => {
   const { userId } = req.params;
 
   try {
-    const cart = await Cart.findOne({ userId });
+    const user = await User.findById(userId);
+    const customer = await Customer.findById(user.instance);
+    const cart = await Cart.findById(customer.cart);
     if (!cart) {
       return res.status(404).json({ error: 'Cart not found' });
     }
@@ -46,14 +52,15 @@ const addOneProductToCart = async (req, res) => {
 
   try {
 
-    const user = await TestUser.findById(userId);
+    const user = await User.findById(userId);
+    const customer = await Customer.findById(user.instance);
     const product = await Product.findById(productId);
 
-    if (!user || !product) {
-      return res.status(404).json({ message: 'User or Product not found.' });
+    if (!customer || !product) {
+      return res.status(404).json({ message: 'Customer or Product not found.' });
     }
 
-    let cart = await Cart.findOne({ userId });
+    let cart = await Cart.findById(customer.cart);
 
     if (!cart) {
       return res.status(404).json({ message: 'Cart not found for this user.' });
@@ -92,14 +99,15 @@ const updateOneProductInCart = async (req, res) => {
       return res.status(404).json({ message: 'Please input valid quantity.' });
     }
 
-    const user = await TestUser.findById(userId);
+    const user = await User.findById(userId);
+    const customer = await Customer.findById(user.instance);
     const product = await Product.findById(productId);
 
-    if (!user || !product) {
-      return res.status(404).json({ message: 'User or Product not found.' });
+    if (!customer || !product) {
+      return res.status(404).json({ message: 'Customer or Product not found.' });
     }
 
-    let cart = await Cart.findOne({ userId });
+    let cart = await Cart.findById(customer.cart);
 
     if (!cart) {
       return res.status(404).json({ message: 'Cart not found for this user.' });
@@ -128,15 +136,15 @@ const deleteOneProductInCart = async (req, res) => {
 
   try {
 
-    const user = await TestUser.findById(userId);
+    const user = await User.findById(userId);
+    const customer = await Customer.findById(user.instance);
     const product = await Product.findById(productId);
 
-    if (!user || !product) {
-      return res.status(404).json({ message: 'User or Product not found.' });
+    if (!customer || !product) {
+      return res.status(404).json({ message: 'Customer or Product not found.' });
     }
 
-
-    const cart = await Cart.findOne({ userId });
+    const cart = await Cart.findById(customer.cart);
     if (!cart) {
       return res.status(404).json({ error: 'Cart not found' });
     }
