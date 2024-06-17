@@ -17,7 +17,7 @@ const Header = () => {
     }
   };
 
-  const SearchTemplet: FC<SProps> = ({ className }) => {
+  const SearchTemplate: FC<SProps> = ({ className }) => {
     return (
       <div className={`${className} relative rounded-md lg:w-96 lg:mx-12 mx-6`}>
         <input type="text" name="search" id="search"
@@ -43,7 +43,7 @@ const Header = () => {
               <span className="lg:hidden">M</span>
               <span className="text-xs">Chuwa</span>
             </h1>
-            <SearchTemplet className="hidden lg:block"/>
+            <SearchTemplate className="hidden lg:block"/>
           </div>
           <div className="flex items-center">
             <img src={userStarIcon} alt='' className="w-7 h-7"/>
@@ -52,7 +52,7 @@ const Header = () => {
             <span className="text-white ml-2 text-base font-semibold">$0.00</span>
           </div>
         </nav>
-        <SearchTemplet className="lg:hidden"/>
+        <SearchTemplate className="lg:hidden"/>
       </header>
       <Cart ref={cartRef}/>
     </>

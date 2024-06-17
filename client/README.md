@@ -8,6 +8,7 @@
 - [React Router](https://reactrouter.com/en/main/start/overview)
 - [Redux](https://react-redux.js.org/introduction/getting-started)
 - [Tailwind css](https://tailwindcss.com/docs/aspect-ratio)
+- [Headless ui](https://headlessui.com/)
 
 ## Requirement
 
