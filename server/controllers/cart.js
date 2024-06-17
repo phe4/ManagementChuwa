@@ -19,7 +19,7 @@ const createCart = async (userId) => {
   try {
     const user = await User.findById(userId);
     const customer = await Customer.findById(user.instance);
-    customer.cart = cart;
+    customer.cart = cart._id;
     await cart.save();
     await customer.save();
     res.status(200).json(cart);
