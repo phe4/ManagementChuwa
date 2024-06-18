@@ -2,6 +2,7 @@ import userStarIcon from '../assets/user-star.png'
 import cartIcon from '../assets/cart.png'
 import Cart, { CMethods } from './Cart';
 import { useRef, FC } from 'react';
+import { Link } from "react-router-dom";
 
 const Header = () => {
 
@@ -46,8 +47,10 @@ const Header = () => {
             <SearchTemplate className="hidden lg:block"/>
           </div>
           <div className="flex items-center">
-            <img src={userStarIcon} alt='' className="w-7 h-7"/>
-            <span className="text-white cursor-pointer ml-2 text-base font-semibold">Sign In</span>
+            <Link className="flex" to="/signin">
+              <img src={userStarIcon} alt='' className="w-7 h-7"/>
+              <span className="hidden md:inline text-white cursor-pointer ml-2 text-base font-semibold">Sign In</span>
+            </Link>
             <img src={cartIcon} alt='' onClick={toggleCart} className="w-8 h-8 ml-6 cursor-pointer"/>
             <span className="text-white ml-2 text-base font-semibold">$0.00</span>
           </div>

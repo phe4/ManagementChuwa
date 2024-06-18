@@ -4,7 +4,7 @@ const Signin = () => {
   const navigate = useNavigate();
 
   const login = () => {
-    navigate("/products");
+    navigate("/");
   };
 
   return (
@@ -29,7 +29,7 @@ const Signin = () => {
           Don’t have an account?
           <Link className="font-medium text-sm text-blue underline" to="/signup">Sign Up</Link>
         </p>
-        <Link className="font-medium text-sm text-blue underline md:text-left text-center mt-3 md:mt-0" to="/signup">Forgot password?</Link>
+        <Link className="font-medium text-sm text-blue underline md:text-left text-center mt-3 md:mt-0" to="/password">Forgot password?</Link>
       </div>
     </div>
   )
