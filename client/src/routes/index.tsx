@@ -1,3 +1,4 @@
+import { createBrowserRouter } from "react-router-dom";
 import App from "../pages/App.tsx";
 import ErrorPage from "../pages/Error.tsx";
 import Products from "../pages/Products.tsx";
@@ -5,9 +6,6 @@ import Signup from "../pages/Signup.tsx";
 import Signin from "../pages/Signin.tsx";
 import Password from "../pages/Password.tsx";
 import Email from "../pages/Email.tsx";
-import {
-  createBrowserRouter,
-} from "react-router-dom";
 
 const router = createBrowserRouter([
   {
