@@ -1,12 +1,13 @@
 import { Navigate } from 'react-router-dom';
-import { FC, useMemo, ReactNode } from 'react';
+import { FC, ReactNode } from 'react';
+import { useAppSelector } from '../app/hooks';
 
 interface ProtectedRouteProps {
   children: ReactNode
 }
 
 const ProtectedRoute: FC<ProtectedRouteProps> = ({ children}): ReactNode => {
-  const token: string | null = useMemo(() => localStorage.getItem('token'), []);
+  const token: string = useAppSelector((state) => state.user.token);
 
   if (!token) {
     return <Navigate to="/signin" />;

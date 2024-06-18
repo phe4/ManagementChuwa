@@ -1,10 +1,40 @@
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../app/hooks';
+import { doLogin } from '../app/reducers/user.ts';
+import {useState} from "react";
+import { validEmail, validPassword } from "../utils/validate.ts";
 
 const Signin = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  const login = () => {
-    navigate("/");
+  const [showPwd, setShowPwd] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [emailErr, setEmailErr] = useState('');
+  const [pwdErr, setPwdErr] = useState('');
+
+  const login = async () => {
+    if (!validEmail(email) || !validPassword(password)) {
+      if (!validEmail(email)) setEmailErr('Invalid Email Input');
+      if (!validPassword(password)) setPwdErr('Invalid Password Input');
+      return;
+    }
+
+    setEmailErr('');
+    setPwdErr('');
+
+    try {
+      await dispatch(doLogin({
+        email: email,
+        password: password
+      }));
+      setEmail('');
+      setPassword('');
+      navigate("/");
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -12,16 +42,19 @@ const Signin = () => {
       <h2 className="text-black-common text-2xl md:text-3xl font-bold pt-10 pb-8 text-center">Sign in to your account</h2>
       <div className="flex flex-col w-full">
         <label className="text-base font-normal text-gray">Email</label>
-        <input className="h-12 border border-solid border-gray-border rounded px-1.5 outline-0"/>
-        <span className="text-sm font-normal text-red text-right">Invalid Email Input</span>
+        <input className="h-12 border border-solid border-gray-border rounded px-1.5 outline-0"
+               value={email} onChange={(e) => {setEmail(e.target.value)}}/>
+        <span className="text-sm font-normal text-red text-right">{emailErr}</span>
       </div>
       <div className="flex flex-col w-full mt-2.5">
         <label className="text-base font-normal text-gray">Password</label>
         <div className="relative w-full">
-          <input type="password" className="w-full h-12 border border-solid border-gray-border rounded pl-2.5 pr-12 outline-0"/>
-          <span className="absolute right-3 inset-y-1/4 text-sm font-normal text-gray underline cursor-pointer">Show</span>
+          <input type={showPwd ? 'text' : 'password'} className="w-full h-12 border border-solid border-gray-border rounded pl-2.5 pr-12 outline-0"
+                 value={password} onChange={(e) => {setPassword(e.target.value)}}/>
+          <span className="absolute right-3 inset-y-1/4 text-sm font-normal text-gray underline cursor-pointer"
+                onClick={() => {setShowPwd(!showPwd)}}>Show</span>
         </div>
-        <span className="text-sm font-normal text-red text-right">Invalid Email Input</span>
+        <span className="text-sm font-normal text-red text-right">{pwdErr}</span>
       </div>
       <button className="bg-blue text-white rounded w-full text-base font-semibold py-3 my-4" onClick={login}>Sign In</button>
       <div className="flex flex-col md:flex-row md:justify-between w-full pb-12">

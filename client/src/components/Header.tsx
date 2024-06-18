@@ -21,7 +21,7 @@ const Header = () => {
   const SearchTemplate: FC<SProps> = ({ className }) => {
     return (
       <div className={`${className} relative rounded-md lg:w-96 lg:mx-12 mx-6`}>
-        <input type="text" name="search" id="search"
+        <input type="text" name="search"
                className="block w-full rounded-sm border-0 text-gray-light placeholder:text-gray-light text-base font-normal h-11 px-2.5 focus:outline-0"
                placeholder="Search"/>
         <div className="absolute inset-y-0 right-2.5 cursor-pointer flex items-center">

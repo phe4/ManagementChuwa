@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import {useState} from "react";
+import { validEmail } from "../utils/validate.ts";
 
 const Password = () => {
   const navigate = useNavigate();
@@ -7,8 +8,7 @@ const Password = () => {
   const [errorMsg, setErrorMsg] = useState("");
 
   const updatePwd = () => {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (emailRegex.test(email)) {
+    if (validEmail(email)) {
       setErrorMsg('');
       navigate("/email");
     } else {
