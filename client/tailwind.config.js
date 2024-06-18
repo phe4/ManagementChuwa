@@ -21,7 +21,11 @@ export default {
       'yellow': '#FCE944',
       'white': '#FFFFFF'
     },
-    extend: {},
+    extend: {
+      maxHeight: {
+        '9/10': '90%',
+      }
+    },
   },
   plugins: [],
 }

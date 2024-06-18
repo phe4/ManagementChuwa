@@ -4,6 +4,7 @@ import App from './routes/App.tsx'
 import ErrorPage from "./routes/Error";
 import Signin from "./routes/Signin";
 import Products from "./routes/Products";
+import Signup from "./routes/Signup.tsx";
 import './index.css'
 import {
   createBrowserRouter,
@@ -19,6 +20,11 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Signin />,
+        errorElement: <ErrorPage />
+      },
+      {
+        path: '/signup',
+        element: <Signup />,
         errorElement: <ErrorPage />
       },
       {

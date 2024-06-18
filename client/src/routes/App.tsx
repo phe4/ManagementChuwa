@@ -6,7 +6,7 @@ const App = () => {
   return (
     <div className="w-full h-full flex flex-col overflow-hidden">
       <Header/>
-      <div className="flex-1">
+      <div className="flex-1 flex justify-center items-center">
         <Outlet />
       </div>
       <Footer/>
