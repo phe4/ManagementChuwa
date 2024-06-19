@@ -1,13 +1,16 @@
 import { useNavigate, Link } from "react-router-dom";
 import {useState} from "react";
+import { useGlobal } from "../hooks/useGlobal";
 
 const roles: string[] = ["Customer", "Vendor"];
 
 const Signup = () => {
   const navigate = useNavigate();
-  let [selectedRole, setSelectedRole] = useState(roles[0])
+  const { showLoading } = useGlobal();
+  const [selectedRole, setSelectedRole] = useState(roles[0])
 
   const createAccount = () => {
+    showLoading(true);
     navigate("/");
   };
 

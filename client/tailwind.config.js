@@ -24,6 +24,9 @@ export default {
     extend: {
       maxHeight: {
         '9/10': '90%',
+      },
+      translate: {
+        'm/5': '-50%'
       }
     },
   },

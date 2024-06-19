@@ -3,10 +3,13 @@ import { useAppDispatch } from '../app/hooks';
 import { doLogin } from '../app/reducers/user.ts';
 import {useState} from "react";
 import { validEmail, validPassword } from "../utils/validate.ts";
+import { useGlobal } from "../hooks/useGlobal";
 
 const Signin = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const { showLoading, showMessage } = useGlobal();
 
   const [showPwd, setShowPwd] = useState(false);
   const [email, setEmail] = useState('');
@@ -15,6 +18,9 @@ const Signin = () => {
   const [pwdErr, setPwdErr] = useState('');
 
   const login = async () => {
+    setEmailErr('');
+    setPwdErr('');
+
     if (!validEmail(email) || !validPassword(password)) {
       if (!validEmail(email)) setEmailErr('Invalid Email Input');
       if (!validPassword(password)) setPwdErr('Invalid Password Input');
@@ -24,16 +30,20 @@ const Signin = () => {
     setEmailErr('');
     setPwdErr('');
 
+    showLoading(true);
     try {
       await dispatch(doLogin({
         email: email,
         password: password
       }));
+      showLoading(false);
       setEmail('');
       setPassword('');
       navigate("/");
     } catch (e) {
-      console.log(e);
+      const err: string = String(e);
+      showLoading(false);
+      showMessage(err);
     }
   };
 
