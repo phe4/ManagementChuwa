@@ -27,9 +27,6 @@ const Signin = () => {
       return;
     }
 
-    setEmailErr('');
-    setPwdErr('');
-
     showLoading(true);
     try {
       await dispatch(doLogin({

@@ -9,6 +9,7 @@ const App = () => {
   const showLoading = useAppSelector((state) => state.global.isLoading);
   const showToast = useAppSelector((state) => state.global.showMessage);
   const msg = useAppSelector((state) => state.global.messageText);
+  const msgType = useAppSelector((state) => state.global.messageType);
 
   return (
     <>
@@ -20,7 +21,7 @@ const App = () => {
         <Footer/>
       </div>
       {showLoading && <Loading />}
-      {showToast && <Toast msg={msg}/>}
+      {showToast && <Toast msg={msg} type={msgType}/>}
     </>
   )
 }

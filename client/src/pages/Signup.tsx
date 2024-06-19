@@ -1,17 +1,50 @@
 import { useNavigate, Link } from "react-router-dom";
 import {useState} from "react";
 import { useGlobal } from "../hooks/useGlobal";
+import {validEmail, validPassword} from "../utils/validate.ts";
+import { postRequest } from "../utils/fetch.ts";
 
 const roles: string[] = ["Customer", "Vendor"];
 
 const Signup = () => {
   const navigate = useNavigate();
-  const { showLoading } = useGlobal();
-  const [selectedRole, setSelectedRole] = useState(roles[0])
+  const { showLoading, showMessage } = useGlobal();
 
-  const createAccount = () => {
+  const [selectedRole, setSelectedRole] = useState(roles[0]);
+  const [showPwd, setShowPwd] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [emailErr, setEmailErr] = useState('');
+  const [pwdErr, setPwdErr] = useState('');
+
+  const createAccount = async () => {
+    setEmailErr('');
+    setPwdErr('');
+
+    if (!validEmail(email) || !validPassword(password)) {
+      if (!validEmail(email)) setEmailErr('Invalid Email Input');
+      if (!validPassword(password)) setPwdErr('Invalid Password Input');
+      return;
+    }
+
     showLoading(true);
-    navigate("/");
+    const params = {
+      username: 'test',
+      email: email,
+      password: password,
+      role: selectedRole
+    };
+
+    try {
+      await postRequest('/auth/register', params);
+      showLoading(false);
+      showMessage('Sign Up successfully, you can login right now', 'success');
+      navigate("/signin");
+    } catch (e) {
+      const err: string = String(e);
+      showLoading(false);
+      showMessage(err);
+    }
   };
 
   return (
@@ -19,16 +52,20 @@ const Signup = () => {
       <h2 className="text-black-common text-2xl md:text-3xl font-bold pt-10 pb-7 text-center">Sign up an account</h2>
       <div className="flex flex-col w-full">
         <label className="text-base font-normal text-gray">Email</label>
-        <input className="h-12 border border-solid border-gray-border rounded px-1.5 outline-0"/>
-        <span className="text-sm font-normal text-red text-right">Invalid Email Input</span>
+        <input className="h-12 border border-solid border-gray-border rounded px-1.5 outline-0"
+               value={email} onChange={(e) => {setEmail(e.target.value)}}/>
+        <span className="text-sm font-normal text-red text-right">{emailErr}</span>
       </div>
       <div className="flex flex-col w-full mt-2">
         <label className="text-base font-normal text-gray">Password</label>
         <div className="relative w-full">
-          <input type="password" className="w-full h-12 border border-solid border-gray-border rounded pl-2.5 pr-12 outline-0"/>
-          <span className="absolute right-3 inset-y-1/4 text-sm font-normal text-gray underline cursor-pointer">Show</span>
+          <input type={showPwd ? "text" : "password"}
+                 className="w-full h-12 border border-solid border-gray-border rounded pl-2.5 pr-12 outline-0"
+                 value={password} onChange={(e) => {setPassword(e.target.value)}}/>
+          <span className="absolute right-3 inset-y-1/4 text-sm font-normal text-gray underline cursor-pointer"
+                onClick={() => {setShowPwd(!showPwd)}}>Show</span>
         </div>
-        <span className="text-sm font-normal text-red text-right">Invalid Email Input</span>
+        <span className="text-sm font-normal text-red text-right">{pwdErr}</span>
       </div>
       <div className="w-full mt-2">
         <label className="text-base font-normal text-gray">Role</label>

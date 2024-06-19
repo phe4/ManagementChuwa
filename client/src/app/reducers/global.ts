@@ -6,14 +6,16 @@ export const globalSlice = createSlice({
     isLoading: false,
     showMessage: false,
     messageText: '',
+    messageType: '',
   },
   reducers: {
     updateLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
-    updateMessage: (state, action: PayloadAction<{show: boolean, msg: string}>) => {
+    updateMessage: (state, action: PayloadAction<{show: boolean, msg: string, type: string}>) => {
       state.showMessage = action.payload.show;
       state.messageText = action.payload.msg;
+      state.messageType = action.payload.type;
     },
   },
 });

@@ -8,10 +8,10 @@ export const useGlobal = () => {
     dispatch(updateLoading(isShow));
   };
 
-  const showMessage = (msg: string, delay = 2000) => {
-    dispatch(updateMessage({show: true, msg: msg}));
+  const showMessage = (msg: string, type= "failed", delay = 2000) => {
+    dispatch(updateMessage({show: true, msg: msg, type: type}));
     setTimeout(() => {
-      dispatch(updateMessage({show: false, msg: ''}));
+      dispatch(updateMessage({show: false, msg: '', type: type}));
     }, delay);
   };
 

@@ -2,20 +2,37 @@ import userStarIcon from '../assets/user-star.png'
 import cartIcon from '../assets/cart.png'
 import Cart, { CMethods } from './Cart';
 import { useRef, FC } from 'react';
-import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from "../app/hooks.ts";
 
 const Header = () => {
 
+  const token = useAppSelector((state) => state.user.token);
   const cartRef = useRef<CMethods>(null);
+  const navigate = useNavigate();
 
   interface SProps {
     className: string
   }
 
   const toggleCart = (): void => {
+    if (!token) return;
     if (cartRef.current) {
       cartRef.current.toggle();
     }
+  };
+
+  const toggleSignIn = () => {
+    if (token) {
+      doSignOut();
+    } else {
+      navigate("/signin");
+    }
+  };
+
+  const doSignOut = () => {
+    localStorage.clear();
+    window.location.href = '/signin';
   };
 
   const SearchTemplate: FC<SProps> = ({ className }) => {
@@ -47,11 +64,11 @@ const Header = () => {
             <SearchTemplate className="hidden lg:block"/>
           </div>
           <div className="flex items-center">
-            <Link className="flex" to="/signin">
-              <img src={userStarIcon} alt='' className="w-7 h-7"/>
-              <span className="hidden md:inline text-white cursor-pointer ml-2 text-base font-semibold">Sign In</span>
-            </Link>
-            <img src={cartIcon} alt='' onClick={toggleCart} className="w-8 h-8 ml-6 cursor-pointer"/>
+            <img src={userStarIcon} alt='' className="w-7 h-7"/>
+            <span className="text-white cursor-pointer ml-2 text-base font-semibold" onClick={toggleSignIn}>
+              {token ? "Sign Out" : "Sign In"}
+            </span>
+            <img src={cartIcon} alt='' onClick={toggleCart} className={`w-8 h-8 ml-6 ${token? 'cursor-pointer' : 'cursor-default'}`}/>
             <span className="text-white ml-2 text-base font-semibold">$0.00</span>
           </div>
         </nav>
