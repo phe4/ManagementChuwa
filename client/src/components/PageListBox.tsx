@@ -16,7 +16,7 @@ interface PropsType {
 const PageListBox: FC<PropsType> = ({ options, selected, callback }) => {
 
   return (
-    <div className="w-44">
+    <div className="w-full">
       <Listbox value={selected} onChange={callback}>
         <ListboxButton
           className={clsx(

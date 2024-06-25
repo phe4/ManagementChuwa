@@ -19,7 +19,7 @@ const ErrorPage = () => {
             wrong!</p>
           <button className="bg-blue text-white text-sm font-semibold rounded h-10 px-16"
                   onClick={() => {
-                    navigate("/products")
+                    navigate("/")
                   }}>Go Home
           </button>
         </div>

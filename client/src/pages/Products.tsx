@@ -36,13 +36,14 @@ const Products = () => {
       setTotalPage(data.pages);
     } catch (e) {
       console.log(e);
+      showMessage(String(e))
     }
   }, [sort, currentPage]);
 
   useEffect(() => {
     showLoading(true);
     getAllProducts()
-      .catch((e: unknown)=> {showMessage(e as string)})
+      .catch(()=> {console.log('error')})
       .finally(() => {showLoading(false)});
   }, [getAllProducts]);
 
@@ -57,11 +58,13 @@ const Products = () => {
   };
 
   return (
-    <div className="w-full h-full p-6 overflow-y-auto">
+    <div className="w-full h-full p-6 overflow-y-auto flex flex-col">
       <div className="w-full flex justify-between items-center flex-col md:flex-row">
         <h2 className="text-black-common text-3xl font-bold mb-4 md:mb-0">Products</h2>
         <div className="flex items-center">
-          <PageListBox options={SortOptions} selected={sort} callback={setSort}></PageListBox>
+          <div className="w-44">
+            <PageListBox options={SortOptions} selected={sort} callback={setSort} />
+          </div>
           {
             user.role === 'Vendor'
             && <button className="bg-blue text-white rounded text-sm font-semibold py-2 px-5 ml-2"
@@ -69,25 +72,34 @@ const Products = () => {
           }
         </div>
       </div>
-      <ul className="bg-white rounded-sm py-4 px-2.5 w-full flex flex-wrap">
-        {products.map(product => (
-          <li key={product._id} className="list-none border border-gray-border rounded w-full md:w-pmd lg:w-plg mx-1/100 my-1/100 p-2">
-            <img src={product.image} alt=""/>
-            <p className="text-sm font-normal text-gray mt-1">{product.name}</p>
-            <p className="font-semibold text-base text-black-common">${product.price}</p>
-            <div className="flex justify-between mt-1">
-              <button className="bg-blue text-white rounded text-xs font-semibold py-1.5 w-5.9/12">Add</button>
-              {
-                user.id === product.owner
-                && <button onClick={() => {editProduct(product._id)}} className="bg-white text-black-common rounded
+      {
+        products.length > 0
+          ?
+          <ul className="bg-white rounded-sm py-4 px-2.5 w-full flex flex-wrap mt-4 flex-1">
+            {products.map(product => (
+              <li key={product._id}
+                  className="list-none border border-gray-border rounded w-full md:w-pmd lg:w-plg mx-1/100 my-1/100 p-2">
+                <img src={product.image} alt=""/>
+                <p className="text-sm font-normal text-gray mt-1 truncate">{product.name}</p>
+                <p className="font-semibold text-base text-black-common">${product.price}</p>
+                <div className="flex justify-between mt-1">
+                  <button className="bg-blue text-white rounded text-xs font-semibold py-1.5 w-5.9/12">Add</button>
+                  {
+                    user.id === product.owner
+                    && <button onClick={() => {
+                      editProduct(product._id)
+                    }} className="bg-white text-black-common rounded
                       text-xs font-semibold py-1.5 w-5.9/12 border border-gray-border">Edit</button>
-              }
-            </div>
-          </li>
-        ))}
-      </ul>
+                  }
+                </div>
+              </li>
+            ))}
+          </ul>
+          :
+          <p className="w-full flex-1 flex justify-center items-center">No Data</p>
+      }
       <div className="flex justify-end mt-5">
-        <ul className="flex border border-gray-page-border rounded bg-white">
+      <ul className="flex border border-gray-page-border rounded bg-white">
           <li className="size-10 flex justify-center items-center cursor-pointer" onClick={() => {
             updatePage(-1)
           }}>
@@ -99,7 +111,9 @@ const Products = () => {
           {Array.from({length: totalPage}).map((_, idx) => (
             <li key={idx} className={`${currentPage === idx + 1 ? 'bg-blue text-white' : 'bg-white text-blue'} 
             text-base font-normal size-10 flex justify-center items-center cursor-pointer border-l border-gray-page-border`}
-            onClick={() => {setCurrentPage(idx + 1)}}>{idx + 1}</li>
+                onClick={() => {
+                  setCurrentPage(idx + 1)
+                }}>{idx + 1}</li>
           ))}
           <li className="size-10 flex justify-center items-center cursor-pointer border-l border-gray-page-border" onClick={() => {updatePage(1)}}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}

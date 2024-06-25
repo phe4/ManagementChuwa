@@ -37,6 +37,10 @@ export const putRequest = <T>(url: string, data: object): Promise<T> => {
   return request<T>(url, 'PUT', data);
 };
 
+export const patchRequest = <T>(url: string, data: object): Promise<T> => {
+  return request<T>(url, 'PATCH', data);
+};
+
 export const deleteRequest = <T>(url: string): Promise<T> => {
   return request<T>(url, 'DELETE');
 };

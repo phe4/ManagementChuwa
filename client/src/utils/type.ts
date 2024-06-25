@@ -47,3 +47,12 @@ export interface ProductPageType {
   pages: number;
   total: number;
 }
+
+export interface ProductCreateType {
+  name: string;
+  description: string;
+  category: string;
+  price: number;
+  quantity: number;
+  image: string;
+}
