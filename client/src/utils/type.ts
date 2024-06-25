@@ -26,3 +26,24 @@ interface User {
   orders: [];
   _v: number;
 }
+
+export interface ProductType {
+  _id: string;
+  name: string;
+  description: string;
+  category: string;
+  price: number;
+  quantity: number;
+  image: string;
+  owner: string;
+  createdAt: string;
+  _v: number;
+}
+
+export interface ProductPageType {
+  data: ProductType[];
+  page: number;
+  pageSize: number;
+  pages: number;
+  total: number;
+}

@@ -15,7 +15,7 @@ const App = () => {
     <>
       <div className="w-full h-full flex flex-col overflow-hidden">
         <Header/>
-        <div className="flex-1 flex justify-center items-center">
+        <div className="flex-1 flex justify-center items-center overflow-y-auto">
           <Outlet/>
         </div>
         <Footer/>

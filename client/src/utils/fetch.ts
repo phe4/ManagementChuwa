@@ -1,11 +1,7 @@
 const token: string = localStorage.getItem('token') || '';
 const prefix = '/client';
 
-interface errType {
-  message: string
-}
-
-const request = async (url: string = '', method: string = '', data: object = {}) => {
+const request = async <T>(url: string = '', method: string = '', data: object = {}): Promise<T> => {
   const response = await fetch(prefix + url, {
     method: method,
     credentials: "same-origin",
@@ -13,31 +9,34 @@ const request = async (url: string = '', method: string = '', data: object = {})
       "Content-Type": "application/json",
       "x-auth-token": token
     },
-    body: JSON.stringify(data)
+    body: (method === 'GET' || method === 'DELETE') ? null : JSON.stringify(data)
   });
+
   if (response.status === 401) {
     localStorage.clear();
     window.location.href = '/signin';
-  }else if (response.status === 200 || response.status === 201) {
-    return response.json();
-  } else {
-    const err: errType = await response.json() as errType;
-    throw new Error(err.message);
+    return Promise.reject(new Error('Unauthorized'));
   }
+
+  if (!response.ok) {
+    return Promise.reject(new Error(`Request failed with status ${String(response.status)}`));
+  }
+
+  return await response.json() as Promise<T>;
 };
 
-export const getRequest = (url: string) => {
-  return request(url, 'GET');
+export const getRequest = <T>(url: string): Promise<T> => {
+  return request<T>(url, 'GET');
 };
 
-export const postRequest = (url: string, data: object) => {
-  return request(url, 'POST', data);
+export const postRequest = <T>(url: string, data: object): Promise<T> => {
+  return request<T>(url, 'POST', data);
 };
 
-export const putRequest = (url: string, data: object) => {
-  return request(url, 'PUT', data);
+export const putRequest = <T>(url: string, data: object): Promise<T> => {
+  return request<T>(url, 'PUT', data);
 };
 
-export const deleteRequest = (url: string) => {
-  return request(url, 'DELETE');
+export const deleteRequest = <T>(url: string): Promise<T> => {
+  return request<T>(url, 'DELETE');
 };

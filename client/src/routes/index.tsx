@@ -6,6 +6,9 @@ import Signup from "../pages/Signup.tsx";
 import Signin from "../pages/Signin.tsx";
 import Password from "../pages/Password.tsx";
 import Email from "../pages/Email.tsx";
+import ProductsAdd from "../pages/ProductsAdd.tsx";
+import ProductsEdit from "../pages/ProductsEdit.tsx";
+import ProtectedRoute from "./ProtectedRoute.tsx";
 
 const router = createBrowserRouter([
   {
@@ -37,7 +40,17 @@ const router = createBrowserRouter([
         path: '/email',
         element: <Email />,
         errorElement: <ErrorPage />
-      }
+      },
+      {
+        path: '/products/add',
+        element: <ProtectedRoute><ProductsAdd /></ProtectedRoute>,
+        errorElement: <ErrorPage />
+      },
+      {
+        path: '/products/edit/:id',
+        element: <ProtectedRoute><ProductsEdit /></ProtectedRoute>,
+        errorElement: <ErrorPage />
+      },
     ]
   },
 ]);

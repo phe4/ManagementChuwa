@@ -39,7 +39,7 @@ export const { updateUser } = userSlice.actions;
 
 export const doLogin = (data: LoginParamsType) => async (dispatch: AppDispatch) => {
   try {
-    const res: LoginResponseType = await postRequest('/auth/login', data) as LoginResponseType;
+    const res: LoginResponseType = await postRequest<LoginResponseType>('/auth/login', data);
     console.log(res);
     localStorage.setItem('token', res.token);
     dispatch(updateUser(res.token));

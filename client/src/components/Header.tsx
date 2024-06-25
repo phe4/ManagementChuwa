@@ -56,7 +56,7 @@ const Header = () => {
       <header className="bg-black-common pb-2.5 lg:pb-0">
         <nav className="flex justify-between items-center w-full lg:px-12 px-6 py-2">
           <div className="flex items-center">
-            <h1 className="text-3xl text-white font-bold">
+            <h1 className="text-3xl text-white font-bold cursor-pointer" onClick={() => {navigate("/")}}>
               <span className="hidden lg:inline">Management </span>
               <span className="lg:hidden">M</span>
               <span className="text-xs">Chuwa</span>
