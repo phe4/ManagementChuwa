@@ -13,7 +13,7 @@ const App = () => {
 
   return (
     <>
-      <div className="w-full h-auto sm:h-full flex flex-col overflow-hidden">
+      <div className="w-full h-full flex flex-col overflow-hidden">
         <Header/>
         <div className="flex-1 flex justify-center items-center overflow-y-auto">
           <Outlet/>

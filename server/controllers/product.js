@@ -14,6 +14,7 @@ const getAllProducts = async (req, res) => {
     if (page <= 0) return res.status(400).json({ message: 'Invalid page' });
     if (pageSize <= 0) return res.status(400).json({ message: 'Invalid page size' });
 
+    // search by name
     let filter = {};
     if (search) {
       const regex = new RegExp(search, 'i');
@@ -22,6 +23,11 @@ const getAllProducts = async (req, res) => {
           { name: regex }
         ]
       }
+    }
+
+    // vendor or customer
+    if (req.user && req.user !== 'anonymous' && req.user.role === 'Vendor') {
+      filter['owner'] = new mongoose.Types.ObjectId(req.user._id);
     }
 
     const data = await Product.find(filter)

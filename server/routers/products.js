@@ -8,7 +8,7 @@ const {
   getProduct
 } = require('../controllers/product');
 
-router.get('/', getAllProducts);
+router.get('/', auth, getAllProducts);
 router.get('/:id', getProduct);
 router.post('/create', auth, createProduct);
 router.patch('/:id', auth, updateProduct);

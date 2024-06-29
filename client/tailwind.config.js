@@ -35,6 +35,9 @@ export default {
       },
       margin: {
         '1/100': '1%'
+      },
+      borderRadius: {
+        'circle': '50%'
       }
     },
   },

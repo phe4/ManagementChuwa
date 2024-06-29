@@ -8,20 +8,21 @@ import Search from "./Search.tsx";
 
 const Header = () => {
 
-  const token = useAppSelector((state) => state.user.token);
+  const user = useAppSelector((state) => state.user);
   const cartRef = useRef<CMethods>(null);
   const navigate = useNavigate();
   const location = useLocation();
 
   const toggleCart = (): void => {
-    if (!token) return;
-    if (cartRef.current) {
+    if (!user.token) {
+      navigate("/signin");
+    } else if (cartRef.current) {
       cartRef.current.toggle();
     }
   };
 
   const toggleSignIn = () => {
-    if (token) {
+    if (user.token) {
       doSignOut();
     } else {
       navigate("/signin");
@@ -48,10 +49,20 @@ const Header = () => {
           <div className="flex items-center">
             <img src={userStarIcon} alt='' className="w-7 h-7"/>
             <span className="text-white cursor-pointer ml-2 text-base font-semibold" onClick={toggleSignIn}>
-              {token ? "Sign Out" : "Sign In"}
+              {user.token ? "Sign Out" : "Sign In"}
             </span>
-            <img src={cartIcon} alt='' onClick={toggleCart} className={`w-8 h-8 ml-6 ${token? 'cursor-pointer' : 'cursor-default'}`}/>
-            <span className="text-white ml-2 text-base font-semibold">$0.00</span>
+            {
+              user.role !== 'Vendor' &&
+              <>
+                <div className="relative ml-6 cursor-pointer" onClick={toggleCart}>
+                  <img src={cartIcon} alt='' className='w-8 h-8'/>
+                  <div
+                    className="absolute top-0 right-0 bg-red text-white text-xs font-medium size-4 rounded-circle text-center">1
+                  </div>
+                </div>
+                <span className="text-white ml-2 text-base font-semibold">$0.00</span>
+              </>
+            }
           </div>
         </nav>
         {location.pathname === '/' && <Search className="lg:hidden"/>}

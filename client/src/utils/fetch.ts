@@ -1,4 +1,3 @@
-const token: string = localStorage.getItem('token') || '';
 const prefix = '/client';
 
 const request = async <T>(url: string = '', method: string = '', data: object = {}): Promise<T> => {
@@ -7,8 +6,8 @@ const request = async <T>(url: string = '', method: string = '', data: object = 
     credentials: "same-origin",
     headers: {
       "Content-Type": "application/json",
-      "x-auth-token": token
-    },
+      "x-auth-token": localStorage.getItem('token') || '',
+},
     body: (method === 'GET' || method === 'DELETE') ? null : JSON.stringify(data)
   });
 

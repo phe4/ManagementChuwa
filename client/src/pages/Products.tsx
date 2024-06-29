@@ -85,7 +85,10 @@ const Products = () => {
                 <p className="text-sm font-normal text-gray mt-1 truncate">{product.name}</p>
                 <p className="font-semibold text-base text-black-common">${product.price}</p>
                 <div className="flex justify-between mt-1">
-                  <button className="bg-blue text-white rounded text-xs font-semibold py-1.5 w-5.9/12">Add</button>
+                  {
+                    user.role !== 'Vendor'
+                    && <button className="bg-blue text-white rounded text-xs font-semibold py-1.5 w-5.9/12">Add</button>
+                  }
                   {
                     user.id === product.owner
                     && <button onClick={() => {
