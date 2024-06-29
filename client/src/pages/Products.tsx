@@ -16,6 +16,8 @@ const pageSize = '10';
 
 const Products = () => {
   const user = useAppSelector((state) => state.user);
+  const search = useAppSelector((state) => state.search.value);
+  const searchTriggered = useAppSelector((state) => state.search.trigger);
 
   const { showLoading, showMessage } = useGlobal();
   const navigate = useNavigate();
@@ -28,7 +30,7 @@ const Products = () => {
   const getAllProducts = useCallback(async () => {
     const s = sort.id.split('-');
     const sortOrder = s[1] === 'asc' ? '1' : '-1';
-    const url = `/api/products?pageSize=${pageSize}&sortField=${s[0]}&sortOrder=${sortOrder}&page=${String(currentPage)}`;
+    const url = `/api/products?pageSize=${pageSize}&sortField=${s[0]}&sortOrder=${sortOrder}&page=${String(currentPage)}&search=${search}`;
     try {
       const data: ProductPageType = await getRequest<ProductPageType>(url);
       console.log(data)
@@ -38,7 +40,7 @@ const Products = () => {
       console.log(e);
       showMessage(String(e))
     }
-  }, [sort, currentPage]);
+  }, [sort, currentPage, searchTriggered]);
 
   useEffect(() => {
     showLoading(true);
@@ -75,7 +77,7 @@ const Products = () => {
       {
         products.length > 0
           ?
-          <ul className="bg-white rounded-sm py-4 px-2.5 w-full flex flex-wrap mt-4 flex-1">
+          <ul className="bg-white rounded-sm py-4 px-2.5 w-full flex flex-wrap mt-4 flex-1 items-start">
             {products.map(product => (
               <li key={product._id}
                   className="list-none border border-gray-border rounded w-full md:w-pmd lg:w-plg mx-1/100 my-1/100 p-2">

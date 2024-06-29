@@ -1,5 +1,5 @@
 import { useAppDispatch } from '../app/hooks.ts';
-import { updateLoading, updateMessage } from '../app/reducers/global.ts';
+import { updateLoading, updateMessage } from '../app/slice/global.ts';
 
 export const useGlobal = () => {
   const dispatch = useAppDispatch();

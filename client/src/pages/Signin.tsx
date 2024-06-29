@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../app/hooks';
-import { doLogin } from '../app/reducers/user.ts';
+import { doLogin } from '../app/slice/user.ts';
 import {useState} from "react";
 import { validEmail, validPassword } from "../utils/validate.ts";
 import { useGlobal } from "../hooks/useGlobal";

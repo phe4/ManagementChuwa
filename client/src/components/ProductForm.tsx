@@ -186,8 +186,8 @@ const ProductForm: FC<FormProps> = ({ id, submit }) => {
           <img className="w-10/12 max-w-48 my-4" src={previewImg} alt=''/>
         }
       </div>
-      <button className="bg-blue text-white rounded text-sm font-semibold px-3 py-2 my-4" onClick={doSubmit}>Add
-        Product
+      <button className="bg-blue text-white rounded text-sm font-semibold px-3 py-2 my-4" onClick={doSubmit}>
+        {id ? 'Edit Product' : 'Add Product'}
       </button>
     </div>
   );

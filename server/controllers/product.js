@@ -9,17 +9,28 @@ const getAllProducts = async (req, res) => {
     const pageSize = parseInt(req.query.pageSize) || 10;
     const sortField = req.query.sortField || 'createdAt';
     const sortOrder = parseInt(req.query.sortOrder); // 'asc' ? 1 : -1;
+    const search = req.query.search || '';
 
     if (page <= 0) return res.status(400).json({ message: 'Invalid page' });
     if (pageSize <= 0) return res.status(400).json({ message: 'Invalid page size' });
 
-    const data = await Product.find({})
+    let filter = {};
+    if (search) {
+      const regex = new RegExp(search, 'i');
+      filter = {
+        $or: [
+          { name: regex }
+        ]
+      }
+    }
+
+    const data = await Product.find(filter)
       .sort({ [sortField]: sortOrder })
       .skip((page - 1) * pageSize)
       .limit(pageSize)
       .exec();
 
-    const total = await Product.countDocuments({});
+    const total = await Product.countDocuments(filter);
     const pages = Math.ceil(total / pageSize);
 
     res.status(200).json({
