@@ -9,8 +9,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../app/hooks.ts";
 import { useEffect, useCallback, useState } from "react";
+import { fetchCart, updateOneToCart, addOneToCart, deleteOneFromCart } from "../app/slice/cart.ts";
+import { ProductType, CartItemType } from "../utils/type.ts";
 
-interface ProductType {
+interface ProductCartType {
   _id: string;
   name: string;
   description: string;
@@ -37,10 +39,11 @@ interface CartType {
 }
 
 const ProductDetail = () => {
-  // const { showLoading, showMessage } = useGlobal();
+  const { showLoading, showMessage } = useGlobal();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user);
+  const cart = useAppSelector((state) => state.cart.cart);
   const [product, setProduct] = useState<ProductType | null>(null);
   const [cartQuantity, setCartQuantity] = useState(0);
 
@@ -56,58 +59,81 @@ const ProductDetail = () => {
       if (user.role === "Vendor" && productdata.owner === user.id) {
         setProduct(productdata);
       } else if (user.role === "Customer") {
-        const cartUrl = `/api/carts/${user.id}`;
-        const cartdata = await getRequest<CartType>(cartUrl);
         // check if product is in cart
-        const isInCart = cartdata.items.find(
-          (p: ProductShortType) => p.product === id
+        const isInCart = cart?.items.find(
+          (p: CartItemType) => p.product._id === id
         );
+        setProduct(productdata);
         if (isInCart) {
-          setProduct({ ...productdata, cartQuantity: isInCart.quantity });
           setCartQuantity(isInCart.quantity);
-        } else {
-          setProduct({ ...productdata, cartQuantity: 0 });
         }
       }
     } catch (e) {
       console.log(e);
       navigate("/products");
     }
-  }, [id, user]);
+  }, [id, user, cart]);
 
   useEffect(() => {
-    getProduct();
-  }, [id]);
+    showLoading(true);
+    if (cart !== null) {
+      getProduct();
+    }
+    showLoading(false);
+  }, [cart, getProduct]);
 
-  console.log(product);
 
   const editProduct = (id: string = "") => {
     navigate(`/products/edit/${id}`);
   };
 
+  // const addToCart = async () => {
+  //   try {
+  //     const cartUpdateUrl = `/api/carts/${user.id}/products/${product?._id}`;
+  //     const cartUrl = `/api/carts/${user.id}`;
+  //     const cartdata = await getRequest<CartType>(cartUrl);
+  //     const isInCart = cartdata.items.find(
+  //       (p: ProductShortType) => p.product === id
+  //     );
+  //     if (isInCart) {
+  //       const data = {
+  //         quantity: isInCart.quantity + 1,
+  //       };
+  //       await putRequest(cartUpdateUrl, data).then(() => {
+  //         getProduct();
+  //       });
+  //     } else {
+  //       const data = {
+  //         product: product?._id,
+  //         quantity: 1,
+  //       };
+  //       await postRequest(cartUpdateUrl, data).then(() => {
+  //         getProduct();
+  //       });
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
+
   const addToCart = async () => {
     try {
-      const cartUpdateUrl = `/api/carts/${user.id}/products/${product?._id}`;
-      const cartUrl = `/api/carts/${user.id}`;
-      const cartdata = await getRequest<CartType>(cartUrl);
-      const isInCart = cartdata.items.find(
-        (p: ProductShortType) => p.product === id
+      if (!product) return;
+      const isInCart = cart?.items.find(
+        (p: CartItemType) => p.product._id === id
       );
       if (isInCart) {
-        const data = {
-          quantity: isInCart.quantity + 1,
-        };
-        await putRequest(cartUpdateUrl, data).then(() => {
-          getProduct();
-        });
+        dispatch(updateOneToCart(id, isInCart.quantity + 1))
+        // .then(() => {
+        //   getProduct();
+        // });
       } else {
-        const data = {
-          product: product?._id,
-          quantity: 1,
-        };
-        await postRequest(cartUpdateUrl, data).then(() => {
-          getProduct();
-        });
+        if (product) {
+          dispatch(addOneToCart(product))
+          .then(() => {
+            getProduct();
+          });
+        }
       }
     } catch (e) {
       console.log(e);
@@ -116,15 +142,12 @@ const ProductDetail = () => {
 
   const reduceFromCart = async () => {
     try {
-      const cartUpdateUrl = `/api/carts/${user.id}/products/${product?._id}`;
-      const cartUrl = `/api/carts/${user.id}`;
-      const cartdata = await getRequest<CartType>(cartUrl);
-      const isInCart = cartdata.items.find(
-        (p: ProductShortType) => p.product === id
+      const isInCart = cart?.items.find(
+        (p: CartItemType) => p.product._id === id
       );
       if (isInCart) {
         if (isInCart.quantity === 1) {
-          await deleteRequest(cartUpdateUrl);
+          dispatch(deleteOneFromCart(id))
         } else {
           const data = {
             quantity: isInCart.quantity - 1,
@@ -208,7 +231,7 @@ const ProductDetail = () => {
             {product?.description}
           </p>
           {user.role === "Customer" ? (
-            product?.cartQuantity === 0 ? (
+            product && cartQuantity === 0 ? (
               <button
                 className="bg-blue text-white rounded text-sm font-semibold py-2 px-5 ml-2 md:ml-0 mt-4 md:mt-8"
                 onClick={addToCart}

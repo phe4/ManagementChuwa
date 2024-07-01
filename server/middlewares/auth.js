@@ -13,7 +13,6 @@ const authMiddleware = async (req, res, next) => {
     } else {
       // Verify token
       const decoded = await jwt.verify(token, process.env.SECRET_KEY);
-
       const user = {
         _id: decoded.user,
         role: decoded.role,

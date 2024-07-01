@@ -56,3 +56,18 @@ export interface ProductCreateType {
   quantity: number;
   image: string;
 }
+
+export interface CartItemType {
+  product: ProductType;
+  quantity: number;
+  _id: string;
+}
+
+export interface CartType {
+  _id: string;
+  items: [CartItemType];
+  totalPrice: number;
+  createdAt: string;
+}
+
+
