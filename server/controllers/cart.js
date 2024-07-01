@@ -103,6 +103,10 @@ const updateOneProductInCart = async (req, res) => {
   console.log(req.body);
 
   try {
+    const product = await Product.findById(productId);
+    const user = await User.findById(userId);
+    const customer = await Customer.findById(user.instance);
+
     if (!quantity || quantity < 1) {
       return res.status(404).json({ message: 'Please input valid quantity.' });
     }
@@ -110,10 +114,6 @@ const updateOneProductInCart = async (req, res) => {
     if (product.quantity < quantity) {
       return res.status(404).json({ message: 'Insufficient product quantity.' });
     }
-
-    const user = await User.findById(userId);
-    const customer = await Customer.findById(user.instance);
-    const product = await Product.findById(productId);
 
     if (!customer || !product) {
       return res.status(404).json({ message: 'Customer or Product not found.' });
