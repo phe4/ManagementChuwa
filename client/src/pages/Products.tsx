@@ -80,6 +80,7 @@ const Products = () => {
           <ul className="bg-white rounded-sm py-4 px-2.5 w-full flex flex-wrap mt-4 flex-1 items-start">
             {products.map(product => (
               <li key={product._id}
+                  onClick={() => {navigate(`/products/${product._id}`)}}
                   className="list-none border border-gray-border rounded w-full md:w-pmd lg:w-plg mx-1/100 my-1/100 p-2">
                 <img src={product.image} alt=""/>
                 <p className="text-sm font-normal text-gray mt-1 truncate">{product.name}</p>
