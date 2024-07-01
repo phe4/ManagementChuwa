@@ -109,10 +109,10 @@ export const updateOneToCart =
 
 export const deleteOneFromCart =
   (productId: string) =>
-  async (dispatch: AppDispatch, getState: () => { Cart: CartState }) => {
+  async (dispatch: AppDispatch, getState: () => { cart: CartState }) => {
     try {
       const state = getState();
-      const Cart = state.Cart.cart;
+      const Cart = state.cart.cart;
 
       if (Cart) {
         const cartDelUrl = `/api/carts/${productId}`;

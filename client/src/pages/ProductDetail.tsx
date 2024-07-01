@@ -124,15 +124,10 @@ const ProductDetail = () => {
       );
       if (isInCart) {
         dispatch(updateOneToCart(id, isInCart.quantity + 1))
-        // .then(() => {
-        //   getProduct();
-        // });
       } else {
         if (product) {
           dispatch(addOneToCart(product))
-          .then(() => {
-            getProduct();
-          });
+          setCartQuantity(1);
         }
       }
     } catch (e) {
@@ -145,16 +140,14 @@ const ProductDetail = () => {
       const isInCart = cart?.items.find(
         (p: CartItemType) => p.product._id === id
       );
+      console.log(isInCart);
       if (isInCart) {
         if (isInCart.quantity === 1) {
           dispatch(deleteOneFromCart(id))
+          setCartQuantity(0);
         } else {
-          const data = {
-            quantity: isInCart.quantity - 1,
-          };
-          await putRequest(cartUpdateUrl, data);
+          dispatch(updateOneToCart(id, isInCart.quantity - 1))
         }
-        getProduct();
       }
     } catch (e) {
       console.log(e);
@@ -172,15 +165,10 @@ const ProductDetail = () => {
 
   const handleInputSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      const cartUrl = `/api/carts/${user.id}/products/${product?._id}`;
       if (cartQuantity === 0) {
-        deleteRequest(cartUrl);
+        dispatch(deleteOneFromCart(id))
       } else {
-        const data = {
-          product: product?._id,
-          quantity: cartQuantity,
-        };
-        putRequest(cartUrl, data);
+        dispatch(updateOneToCart(id, cartQuantity));
       }
     }
   };
@@ -233,7 +221,7 @@ const ProductDetail = () => {
           {user.role === "Customer" ? (
             product && cartQuantity === 0 ? (
               <button
-                className="bg-blue text-white rounded text-sm font-semibold py-2 px-5 ml-2 md:ml-0 mt-4 md:mt-8"
+                className="bg-blue text-white rounded-md text-sm font-semibold py-2 px-5 ml-2 md:ml-0 mt-4 md:mt-8"
                 onClick={addToCart}
               >
                 Add Product
@@ -242,7 +230,7 @@ const ProductDetail = () => {
               // control buttons for cart quantity, subtract (remove if 0), input number, add
               <div className="flex mt-4 md:mt-8 w-full items-center justify-center md:justify-start">
                 <button
-                  className="bg-blue text-white rounded-s-lg text-sm font-bold py-2 px-5 ml-2 md:ml-0"
+                  className="bg-blue text-white rounded-s-md text-sm font-bold py-2 px-5 ml-2 md:ml-0"
                   onClick={reduceFromCart}
                 >
                   <svg
@@ -268,7 +256,7 @@ const ProductDetail = () => {
                   className="bg-blue text-white text-sm py-2 w-10 text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none focus:outline-none"
                 />
                 <button
-                  className="bg-blue text-white rounded-e-lg text-sm font-bold py-2 px-5"
+                  className="bg-blue text-white rounded-e-md text-sm font-bold py-2 px-5"
                   onClick={addToCart}
                 >
                   <svg
