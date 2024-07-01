@@ -9,6 +9,7 @@ import Email from "../pages/Email.tsx";
 import ProductsAdd from "../pages/ProductsAdd.tsx";
 import ProductsEdit from "../pages/ProductsEdit.tsx";
 import ProtectedRoute from "./ProtectedRoute.tsx";
+import ProductDetail from "../pages/ProductDetail.tsx";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,11 @@ const router = createBrowserRouter([
       {
         path: '/products/edit/:id',
         element: <ProtectedRoute><ProductsEdit /></ProtectedRoute>,
+        errorElement: <ErrorPage />
+      },
+      {
+        path: '/products/:id',
+        element: <ProductDetail />,
         errorElement: <ErrorPage />
       },
     ]
