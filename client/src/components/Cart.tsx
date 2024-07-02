@@ -108,8 +108,10 @@ const Cart = forwardRef<CMethods>(function Cart(_props, ref) {
               </svg>
             </header>
             {!totalQuantity ? (
-              <div className="flex center">
+              <div className="flex items-center my-1 md:my-4 w-full h-full">
+                <p className="text-black-common text-xl md:text-3xl font-bold mt-6 mb-9 text-center">
                 Cart is Empty! Add your first product!
+                </p>
               </div>
             ) : (
               cart && (
