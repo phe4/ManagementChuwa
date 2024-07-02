@@ -35,8 +35,6 @@ const Products = () => {
     const url = `/api/products?pageSize=${pageSize}&sortField=${s[0]}&sortOrder=${sortOrder}&page=${String(currentPage)}&search=${search}`;
     try {
       const data: ProductPageType = await getRequest<ProductPageType>(url);
-      console.log(data)
-      console.log(cartItems)
       const productWithCount = data.data.map((item) => {
         const cartProduct = cartItems.find((t) => t.product._id === item._id);
         item.cartCount = (cartProduct && cartProduct.quantity) || 0;
@@ -58,7 +56,7 @@ const Products = () => {
   }, [getAllProducts]);
 
   const updatePage = (n: number) => {
-    if (currentPage + n <= 0 || currentPage + n >= totalPage) return;
+    if (currentPage + n <= 0 || currentPage + n > totalPage) return;
     setCurrentPage(currentPage + n);
   };
 
@@ -89,7 +87,7 @@ const Products = () => {
             {products.map(product => (
               <li key={product._id}
                   className="list-none border border-gray-border rounded w-full md:w-pmd lg:w-plg mx-1/100 my-1/100 p-2">
-                <img src={product.image} alt=""/>
+                <img className="cursor-pointer" src={product.image} alt="" onClick={() => {navigate(`/products/${product._id}`)}}/>
                 <p className="text-sm font-normal text-gray mt-1 truncate">{product.name}</p>
                 <p className="font-semibold text-base text-black-common">${product.price}</p>
                 <div className="flex justify-between mt-1">
