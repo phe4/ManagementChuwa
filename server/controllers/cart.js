@@ -3,11 +3,14 @@ const Product = require('../models/Product');
 const User = require('../models/User');
 const Customer = require('../models/Customer');
 
+const calculateTotalPrice = (items) => {
+  return items.reduce((total, item) => total + item.product.price * item.quantity, 0);
+}
 
 const getAllProductsFromCart = async (req, res) => {
   if (!req.user)
     return res.status(401).json({ message: 'No token, authorization denied' });
-  
+
   // user instance id
   const userId = req.user._id;
   try {
@@ -55,7 +58,7 @@ const addOneProductToCart = async (req, res) => {
     const existingProductIndex = cart.items.findIndex(item => item.product.equals(productId));
 
     if (existingProductIndex !== -1) {
-      if ( cart.items[existingProductIndex].quantity >= product.quantity) {
+      if (cart.items[existingProductIndex].quantity >= product.quantity) {
         return res.status(400).json({ message: 'Insufficient product quantity.' });
       }
       cart.items[existingProductIndex].quantity += 1;
@@ -63,7 +66,7 @@ const addOneProductToCart = async (req, res) => {
       cart.items.push({ product: product, quantity: 1 });
     }
 
-    cart.totalPrice += product.price;
+    cart.totalPrice=calculateTotalPrice(cart.items);
 
     await cart.save();
 
@@ -111,10 +114,10 @@ const updateOneProductInCart = async (req, res) => {
     if (existingProductIndex === -1) {
       return res.status(404).json({ message: 'Product not found in cart.' });
     }
-    const oldQuantity = cart.items[existingProductIndex].quantity;
+    
     cart.items[existingProductIndex].quantity = quantity;
 
-    cart.totalPrice += product.price * (quantity - oldQuantity);
+    cart.totalPrice=calculateTotalPrice(cart.items);
 
     await cart.save();
     res.json(cart);
@@ -150,13 +153,10 @@ const deleteOneProductInCart = async (req, res) => {
       return res.status(404).json({ message: 'Product not found in cart.' });
     }
 
-    const oldQuantity = cart.items[existingProductIndex].quantity;
-
     const updatedItems = cart.items.filter(item => !item.product.equals(productId));
     cart.items = updatedItems;
 
-
-    cart.totalPrice -= product.price * oldQuantity;
+    cart.totalPrice=calculateTotalPrice(cart.items);
 
     await cart.save();
     res.json(cart);
