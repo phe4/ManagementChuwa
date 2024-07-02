@@ -13,12 +13,14 @@ import {
 
 interface CartState {
   cart: CartType | null;
+  totalQuantity: number,
   loading: boolean;
   error: string | null;
 }
 
 const initialState: CartState = {
   cart: null,
+  totalQuantity: 0,
   loading: false,
   error: null,
 };
@@ -33,6 +35,8 @@ export const cartSlice = createSlice({
     },
     fetchCartSuccess(state, action: PayloadAction<CartType>) {
       state.cart = action.payload;
+      state.totalQuantity = action.payload.items.reduce((total, item) => total + item.quantity, 0); 
+      state.cart.totalPrice = action.payload.items.reduce((total, item) => total + item.product.price * item.quantity, 0); 
       state.loading = false;
     },
     fetchCartFailure(state, action: PayloadAction<string>) {
@@ -41,6 +45,8 @@ export const cartSlice = createSlice({
     },
     updateCart(state, action: PayloadAction<CartType>) {
       state.cart = action.payload;
+      state.totalQuantity = action.payload.items.reduce((total, item) => total + item.quantity, 0); 
+      state.cart.totalPrice = action.payload.items.reduce((total, item) => total + item.product.price * item.quantity, 0); 
     },
   },
 });
@@ -79,6 +85,7 @@ export const addOneToCart =
         const cartAddUrl = `/api/carts/${product._id}`;
         const newCartData: CartType = await postRequest(cartAddUrl, data);
         dispatch(updateCart(newCartData));
+
       }
     } catch (e) {
       const msg: string = e as string;
