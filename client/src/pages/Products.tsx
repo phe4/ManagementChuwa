@@ -5,6 +5,7 @@ import { getRequest } from '../utils/fetch.ts';
 import {useGlobal} from "../hooks/useGlobal.tsx";
 import {useNavigate} from "react-router-dom";
 import { useAppSelector } from "../app/hooks.ts";
+import AddToCart from "../components/AddToCart.tsx";
 
 const SortOptions = [
   {id: 'createdAt-des', text: 'Last added'},
@@ -18,6 +19,7 @@ const Products = () => {
   const user = useAppSelector((state) => state.user);
   const search = useAppSelector((state) => state.search.value);
   const searchTriggered = useAppSelector((state) => state.search.trigger);
+  const cartItems = useAppSelector((state) => state.cart.carts.items);
 
   const { showLoading, showMessage } = useGlobal();
   const navigate = useNavigate();
@@ -34,13 +36,19 @@ const Products = () => {
     try {
       const data: ProductPageType = await getRequest<ProductPageType>(url);
       console.log(data)
-      setProducts(data.data);
+      console.log(cartItems)
+      const productWithCount = data.data.map((item) => {
+        const cartProduct = cartItems.find((t) => t.product._id === item._id);
+        item.cartCount = (cartProduct && cartProduct.quantity) || 0;
+        return item;
+      });
+      setProducts(productWithCount);
       setTotalPage(data.pages);
     } catch (e) {
       console.log(e);
       showMessage(String(e))
     }
-  }, [sort, currentPage, searchTriggered]);
+  }, [sort, currentPage, searchTriggered, cartItems]);
 
   useEffect(() => {
     showLoading(true);
@@ -87,7 +95,7 @@ const Products = () => {
                 <div className="flex justify-between mt-1">
                   {
                     user.role !== 'Vendor'
-                    && <button className="bg-blue text-white rounded text-xs font-semibold py-1.5 w-5.9/12">Add</button>
+                    && <AddToCart count={product.cartCount} productId={product._id} customClass={['bg-blue text-white', 'bg-blue text-white']}/>
                   }
                   {
                     user.id === product.owner

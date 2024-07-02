@@ -37,6 +37,7 @@ export interface ProductType {
   image: string;
   owner: string;
   createdAt: string;
+  cartCount: number;
   _v: number;
 }
 
@@ -55,4 +56,14 @@ export interface ProductCreateType {
   price: number;
   quantity: number;
   image: string;
+}
+
+export interface CartsItemType {
+  product: ProductType,
+  quantity: number
+}
+
+export interface CartsType {
+  items: CartsItemType[],
+  totalPrice: number
 }

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { AppDispatch } from '../store.ts';
 import { postRequest } from "../../utils/fetch.ts";
+import { fetchCart } from './cart.ts';
 import { LoginParamsType, LoginResponseType, UserStateType, TokenType } from '../../utils/type.ts';
 
 export function getUserInfo(token: string): UserStateType {
@@ -26,11 +27,10 @@ export const userSlice = createSlice({
   name: 'user',
   initialState: getUserInfo(localStorage.getItem('token') || ''),
   reducers: {
-    updateUser: (state, action: PayloadAction<string>) => {
-      const info: UserStateType = getUserInfo(action.payload);
-      state.token = info.token;
-      state.id = info.id;
-      state.role = info.role;
+    updateUser: (state, action: PayloadAction<{token: string, id: string, role: string}>) => {
+      state.token = action.payload.token;
+      state.id = action.payload.id;
+      state.role = action.payload.role;
     },
   },
 });
@@ -42,7 +42,10 @@ export const doLogin = (data: LoginParamsType) => async (dispatch: AppDispatch) 
     const res: LoginResponseType = await postRequest<LoginResponseType>('/auth/login', data);
     console.log(res);
     localStorage.setItem('token', res.token);
-    dispatch(updateUser(res.token));
+    const info: UserStateType = getUserInfo(res.token);
+    dispatch(updateUser(info));
+    if (info.role === 'Customer')
+      await dispatch(fetchCart());
   } catch (e) {
     const msg: string = e as string;
     throw new Error(msg);

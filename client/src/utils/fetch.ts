@@ -1,5 +1,9 @@
 const prefix = '/client';
 
+interface errorType {
+  message: string;
+}
+
 const request = async <T>(url: string = '', method: string = '', data: object = {}): Promise<T> => {
   const response = await fetch(prefix + url, {
     method: method,
@@ -18,7 +22,9 @@ const request = async <T>(url: string = '', method: string = '', data: object = 
   }
 
   if (!response.ok) {
-    return Promise.reject(new Error(`Request failed with status ${String(response.status)}`));
+    const msg: errorType = await response.json() as errorType;
+    console.error(msg)
+    return Promise.reject(new Error(msg.message || response.statusText));
   }
 
   return await response.json() as Promise<T>;
@@ -28,7 +34,7 @@ export const getRequest = <T>(url: string): Promise<T> => {
   return request<T>(url, 'GET');
 };
 
-export const postRequest = <T>(url: string, data: object): Promise<T> => {
+export const postRequest = <T>(url: string, data: object = {}): Promise<T> => {
   return request<T>(url, 'POST', data);
 };
 

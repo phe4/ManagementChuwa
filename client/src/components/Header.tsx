@@ -9,6 +9,8 @@ import Search from "./Search.tsx";
 const Header = () => {
 
   const user = useAppSelector((state) => state.user);
+  const cartCount = useAppSelector((state) => state.cart.totalProducts);
+  const cartPrice = useAppSelector((state) => state.cart.carts.totalPrice);
   const cartRef = useRef<CMethods>(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -56,11 +58,11 @@ const Header = () => {
               <>
                 <div className="relative ml-6 cursor-pointer" onClick={toggleCart}>
                   <img src={cartIcon} alt='' className='w-8 h-8'/>
-                  <div
-                    className="absolute top-0 right-0 bg-red text-white text-xs font-medium size-4 rounded-circle text-center">1
+                  <div className="absolute top-0 right-0 bg-red text-white text-xs font-medium size-4 rounded-circle text-center">
+                    {cartCount}
                   </div>
                 </div>
-                <span className="text-white ml-2 text-base font-semibold">$0.00</span>
+                <span className="text-white ml-2 text-base font-semibold">${cartPrice.toFixed(2)}</span>
               </>
             }
           </div>
