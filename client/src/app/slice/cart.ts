@@ -36,7 +36,7 @@ export const cartSlice = createSlice({
     fetchCartSuccess(state, action: PayloadAction<CartType>) {
       state.cart = action.payload;
       state.totalQuantity = action.payload.items.reduce((total, item) => total + item.quantity, 0); 
-      state.cart.totalPrice = action.payload.items.reduce((total, item) => total + item.product.price * item.quantity, 0); 
+      //state.cart.totalPrice = action.payload.items.reduce((total, item) => total + item.product.price * item.quantity, 0); 
       state.loading = false;
     },
     fetchCartFailure(state, action: PayloadAction<string>) {
@@ -46,7 +46,7 @@ export const cartSlice = createSlice({
     updateCart(state, action: PayloadAction<CartType>) {
       state.cart = action.payload;
       state.totalQuantity = action.payload.items.reduce((total, item) => total + item.quantity, 0); 
-      state.cart.totalPrice = action.payload.items.reduce((total, item) => total + item.product.price * item.quantity, 0); 
+      //state.cart.totalPrice = action.payload.items.reduce((total, item) => total + item.product.price * item.quantity, 0); 
     },
   },
 });
