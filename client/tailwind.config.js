@@ -15,8 +15,10 @@ export default {
       'gray-page': '#777777',
       'gray-page-border': '#ECEEEF',
       'gray-text': '#535353',
+      'green-button': '#22C55E',
       'blue': '#5048E5',
       'red': '#FC5A44',
+      'red-button': '#EF4444',
       'red-tip': '#EA3D2F',
       'yellow': '#FCE944',
       'white': '#FFFFFF'

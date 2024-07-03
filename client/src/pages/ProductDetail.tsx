@@ -73,18 +73,21 @@ const ProductDetail = () => {
                 <p className="text-xl md:text-[32px]/[44px] font-bold text-black-common align-text-top">
                   ${product.price}
                 </p>
-                <div
-                  className={`flex items-center mx-4 bg-${product.quantity === 0 ? '[#EA3D2F]/[13%]' : '[#03d833]/[13%]'} rounded-md h-[30px]`}>
                   {product.quantity === 0 ? (
-                    <p className="text-[10px]/[13.75px] text-red-500 font-bold mx-4">
+                    <div
+                    className={`flex items-center mx-4 bg-[#EA3D2F]/[13%] rounded-md h-[30px]`}>
+                    <p className="text-[10px]/[13.75px] text-red-button font-bold mx-4">
                       Out of stock
                     </p>
+                  </div>
                   ) : (
-                    <p className="text-[10px]/[13.75px] text-green-500 font-bold mx-4">
+                    <div
+                  className={`flex items-center mx-4 bg-[#03d833]/[13%] rounded-md h-[30px]`}>
+                    <p className="text-[10px]/[13.75px] text-green-button font-bold mx-4">
                       {product.quantity} in stock
                     </p>
+                  </div>
                   )}
-                </div>
               </div>
               <p className="text-xs md:text-base text-gray-details font-normal mt-4 md:mt-2 break-words mb-4">
                 {product.description}
