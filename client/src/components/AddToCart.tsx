@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
-import {useAppDispatch} from "../app/hooks.ts";
+import {useAppDispatch, useAppSelector} from "../app/hooks.ts";
 import { addOneToCart, updateOneToCart, deleteOneFromCart } from "../app/slice/cart.ts";
 import {useGlobal} from "../hooks/useGlobal.tsx";
 
@@ -12,6 +12,7 @@ interface propsType {
 const AddToCart: FC<propsType> = ({ count, productId, customClass }) => {
   const dispatch = useAppDispatch();
   const { showLoading, showMessage } = useGlobal();
+  const user = useAppSelector((state) => state.user);
 
   const [ productNumber, setProductNumber] = useState(String(count));
 
@@ -20,6 +21,12 @@ const AddToCart: FC<propsType> = ({ count, productId, customClass }) => {
   }, [count]);
 
   const addProductToCart = () => {
+    if (!user.token) {
+      localStorage.clear();
+      window.location.href = '/signin';
+      return;
+    }
+
     showLoading(true);
     dispatch(addOneToCart(productId))
       .catch((e: unknown) => {showMessage(String(e))})

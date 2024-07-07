@@ -93,11 +93,8 @@ const ProductDetail = () => {
                 {product.description}
               </p>
               {
-                user.role === "Customer"
+                user.role === "Vendor"
                   ?
-                  <AddToCart productId={product._id} count={product.cartCount}
-                             customClass={['bg-blue text-white', 'bg-blue text-white']}/>
-                  :
                   <button
                     onClick={() => {
                       editProduct(product._id);
@@ -105,6 +102,9 @@ const ProductDetail = () => {
                     className="bg-white text-black-common rounded text-xs font-semibold py-1.5 w-5.9/12 border border-gray-border">
                     Edit
                   </button>
+                  :
+                  <AddToCart productId={product._id} count={product.cartCount}
+                             customClass={['bg-blue text-white', 'bg-blue text-white']}/>
               }
             </div>
           </div>

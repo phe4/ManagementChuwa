@@ -8,7 +8,7 @@ const calculateTotalPrice = (items) => {
 }
 
 const getAllProductsFromCart = async (req, res) => {
-  if (!req.user)
+  if (!req.user || req.user.role !== 'Customer')
     return res.status(401).json({ message: 'No token, authorization denied' });
 
   // user instance id
@@ -31,7 +31,7 @@ const getAllProductsFromCart = async (req, res) => {
 };
 
 const addOneProductToCart = async (req, res) => {
-  if (!req.user)
+  if (!req.user || req.user.role !== 'Customer')
     return res.status(401).json({ message: 'No token, authorization denied' });
 
   const userId = req.user._id;
@@ -78,7 +78,7 @@ const addOneProductToCart = async (req, res) => {
 };
 
 const updateOneProductInCart = async (req, res) => {
-  if (!req.user)
+  if (!req.user || req.user.role !== 'Customer')
     return res.status(401).json({ message: 'No token, authorization denied' });
 
   const userId = req.user._id;
@@ -128,7 +128,7 @@ const updateOneProductInCart = async (req, res) => {
 };
 
 const deleteOneProductInCart = async (req, res) => {
-  if (!req.user || req.user === 'Vendor')
+  if (!req.user || req.user.role !== 'Customer')
     return res.status(401).json({ message: 'No token, authorization denied' });
 
   const userId = req.user._id;

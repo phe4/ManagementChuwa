@@ -87,7 +87,7 @@ const Products = () => {
             {products.map(product => (
               <li key={product._id}
                   className="list-none border border-gray-border rounded w-full md:w-pmd lg:w-plg mx-1/100 my-1/100 p-2">
-                <img className="cursor-pointer" src={product.image} alt="" onClick={() => {navigate(`/products/${product._id}`)}}/>
+                <img className="cursor-pointer" style={{aspectRatio: '1/1'}} src={product.image} alt="" onClick={() => {navigate(`/products/${product._id}`)}}/>
                 <p className="text-sm font-normal text-gray mt-1 truncate">{product.name}</p>
                 <p className="font-semibold text-base text-black-common">${product.price}</p>
                 <div className="flex justify-between mt-1">
