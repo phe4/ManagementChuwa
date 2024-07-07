@@ -29,6 +29,10 @@ const Products = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [sort, searchTriggered]);
+
   const getAllProducts = useCallback(async () => {
     const s = sort.id.split('-');
     const sortOrder = s[1] === 'asc' ? '1' : '-1';
