@@ -70,7 +70,7 @@ const AddToCart: FC<propsType> = ({ count, productId, customClass }) => {
         count > 0
           ?
           <div
-            className={`${customClass[0]} rounded text-xs font-semibold flex justify-between items-center w-5.9/12`}>
+            className={`${customClass[0]} rounded text-xs font-semibold flex justify-between items-center`}>
             <p className="w-7 h-7 cursor-pointer flex justify-center items-center" onClick={() => {minusOneProductToCart()}}>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
                    stroke="currentColor" className="size-4">

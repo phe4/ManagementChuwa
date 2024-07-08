@@ -118,7 +118,7 @@ const ProductDetail = () => {
                 <AddToCart
                   productId={product._id}
                   count={product.cartCount}
-                  customClass={["bg-blue text-white", "bg-blue text-white"]}
+                  customClass={["bg-blue text-white  w-5.9/12", "bg-blue text-white"]}
                 />
 
                 <button
@@ -134,7 +134,7 @@ const ProductDetail = () => {
               <AddToCart
                 productId={product._id}
                 count={product.cartCount}
-                customClass={["bg-blue text-white", "bg-blue text-white"]}
+                customClass={["bg-blue text-white w-5.9/12", "bg-blue text-white"]}
               />
             )}
           </div>
