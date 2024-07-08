@@ -78,7 +78,7 @@ const Products = () => {
             <PageListBox options={SortOptions} selected={sort} callback={setSort} />
           </div>
           {
-            user.role === 'Vendor'
+            (user.role === 'Vendor' || user.role === 'Admin')
             && <button className="bg-blue text-white rounded text-sm font-semibold py-2 px-5 ml-2"
                        onClick={() => {editProduct()}}>Add Product</button>
           }
@@ -100,7 +100,7 @@ const Products = () => {
                     && <AddToCart count={product.cartCount} productId={product._id} customClass={['bg-blue text-white', 'bg-blue text-white']}/>
                   }
                   {
-                    user.id === product.owner
+                    (user.id === product.owner || user.role === 'Admin')
                     && <button onClick={() => {
                       editProduct(product._id)
                     }} className="bg-white text-black-common rounded

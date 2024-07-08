@@ -19,7 +19,8 @@ const ProtectedRoute: FC<ProtectedRouteProps> = ({ children}): ReactNode => {
     return <Navigate to="/signin" />;
   }
 
-  if (user.role !== 'Vendor') {
+  // check if user is not a vendor or admin
+  if (user.role !== 'Vendor' && user.role !== 'Admin') {
     showMessage("You don't have permission to access this page!");
     // error page
     // return <Navigate to="/error" />

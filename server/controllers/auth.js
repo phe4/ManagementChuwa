@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const Customer = require("../models/Customer");
 const Vendor = require("../models/Vendor");
+const Admin = require("../models/Admin");
 const Cart = require("../models/Cart");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -11,7 +12,7 @@ const userSchema = Joi.object({
   username: Joi.string().min(3).max(30).required(),
   email: Joi.string().email().required(),
   password: Joi.string().min(6).max(30).required(),
-  role: Joi.string().valid("Vendor", "Customer").required(),
+  role: Joi.string().valid("Vendor", "Customer", "Admin").required(),
   createdAt: Joi.date(),
 });
 
@@ -66,6 +67,13 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+    // if (email === "admin@chuwa.com" && password === "adminchuwa") {
+    //   const admin = { _id: "admin", role: "Admin" };
+    //   const token = jwt.sign({ user: admin._id, role: admin.role }, SECRET_KEY, {
+    //     expiresIn: "24h",
+    //   });
+    //   return res.status(200).json({ token, user: admin });
+    // }
     const user = await User.findOne({ email }).populate("instance");
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password!" });
