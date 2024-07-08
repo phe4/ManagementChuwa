@@ -44,7 +44,7 @@ export const doLogin = (data: LoginParamsType) => async (dispatch: AppDispatch) 
     localStorage.setItem('token', res.token);
     const info: UserStateType = getUserInfo(res.token);
     dispatch(updateUser(info));
-    if (info.role === 'Customer')
+    if (info.role === 'Customer' || info.role === 'Admin')
       await dispatch(fetchCart());
   } catch (e) {
     const msg: string = e as string;

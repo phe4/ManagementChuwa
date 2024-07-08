@@ -33,7 +33,7 @@ const Cart = forwardRef<CMethods>(function Cart(_props, ref) {
   });
 
   useEffect(() => {
-    if (user.token && user.role === 'Customer')
+    if (user.token && (user.role === 'Customer' || user.role === 'Admin'))
       dispatch(fetchCart()).catch((e: unknown) => {console.log(e)})
   }, []);
 
