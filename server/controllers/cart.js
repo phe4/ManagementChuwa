@@ -36,7 +36,9 @@ const getAllProductsFromCart = async (req, res) => {
     if (!cart) {
       return res.status(404).json({ error: "Cart not found" });
     }
+    cart.totalPrice = calculateTotalPrice(cart.items);
 
+    await cart.save();
     res.json(cart);
   } catch (err) {
     console.error(err);
