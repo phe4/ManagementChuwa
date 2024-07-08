@@ -4,12 +4,11 @@ import { useAppSelector } from '../app/hooks';
 import { UserStateType } from '../utils/type';
 import { useGlobal } from '../hooks/useGlobal';
 
-
 interface ProtectedRouteProps {
   children: ReactNode
 }
 
-const ProtectedRoute: FC<ProtectedRouteProps> = ({ children}): ReactNode => {
+const ProtectedVendorRoute: FC<ProtectedRouteProps> = ({ children}): ReactNode => {
   const user: UserStateType = useAppSelector((state) => state.user);
   const { showMessage } = useGlobal();
 
@@ -29,4 +28,4 @@ const ProtectedRoute: FC<ProtectedRouteProps> = ({ children}): ReactNode => {
   return children;
 };
 
-export default ProtectedRoute;
+export default ProtectedVendorRoute;
