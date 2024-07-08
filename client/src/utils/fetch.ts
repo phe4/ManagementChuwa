@@ -17,7 +17,7 @@ const request = async <T>(url: string = '', method: string = '', data: object = 
 
   if (response.status === 401) {
     localStorage.clear();
-    // window.location.href = '/signin';
+    window.location.href = '/signin';
     return Promise.reject(new Error('Unauthorized'));
   }
 
